@@ -24,17 +24,17 @@ export class CategoryFormComponent implements OnInit {
   categoryForm!: FormGroup;
 
   constructor(
-    private _categoryService: CategoryService,
-    private _router: Router,
-    private _formBuilder: FormBuilder
+    private categoryService: CategoryService,
+    private router: Router,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
     if (this.id) {
-      this.category = this._categoryService.getCategory(parseInt(this.id));
+      this.category = this.categoryService.getCategory(parseInt(this.id));
     }
 
-    this.categoryForm = this._formBuilder.nonNullable.group({
+    this.categoryForm = this.formBuilder.nonNullable.group({
       name: [
         this.category ? this.category.name : '',
         [Validators.required, Validators.minLength(5)],
@@ -51,10 +51,10 @@ export class CategoryFormComponent implements OnInit {
     }
     let name = this.categoryForm.value.name;
     if (this.id) {
-      this._categoryService.updateCategory(parseInt(this.id), name);
+      this.categoryService.updateCategory(parseInt(this.id), name);
     } else {
-      this._categoryService.addCategory(name);
+      this.categoryService.addCategory(name);
     }
-    this._router.navigate(['/categories']);
+    this.router.navigate(['/categories']);
   }
 }

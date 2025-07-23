@@ -24,13 +24,13 @@ export class TasksListComponent implements OnInit {
   categories: Category[] = [];
 
   constructor(
-    private _taskService: TaskService,
-    private _categoryService: CategoryService
+    private taskService: TaskService,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
-    this.tasks = this._taskService.getTasks();
-    this.categories = this._categoryService.getCategories();
+    this.tasks = this.taskService.getTasks();
+    this.categories = this.categoryService.getCategories();
   }
 
   sortTasks(): void {
@@ -41,18 +41,18 @@ export class TasksListComponent implements OnInit {
     } else if (this.sortBy === 'priority') {
       this.tasks.sort((a, b) => a.priority - b.priority);
     } else {
-      this.tasks = this._taskService.getTasks();
+      this.tasks = this.taskService.getTasks();
     }
   }
 
   toggleComplete(task: Task): void {
     task.completed = !task.completed;
-    this._taskService.updateTask(task);
+    this.taskService.updateTask(task);
   }
 
   filterTasks(): void {
     if (this.filterByCategory) {
-      this.tasks = this._taskService.getTasks().filter((task) => {
+      this.tasks = this.taskService.getTasks().filter((task) => {
         // Handles both cases: category is an object or an ID
         if (task.category && typeof task.category === 'object') {
           return String(task.category.id) === this.filterByCategory;
@@ -60,7 +60,7 @@ export class TasksListComponent implements OnInit {
         return String(task.category) === this.filterByCategory;
       });
     } else {
-      this.tasks = this._taskService.getTasks();
+      this.tasks = this.taskService.getTasks();
     }
     this.sortTasks();
   }

@@ -9,7 +9,7 @@ export class CategoryService {
   private nextId!: number;
   constructor() { 
     this.categories = {
-      1: new Category(1, 'Categry 1'),
+      1: new Category(1, 'Category 1'),
       2: new Category(2, 'Category 2'),
       3: new Category(3, 'Category 3'),
     }

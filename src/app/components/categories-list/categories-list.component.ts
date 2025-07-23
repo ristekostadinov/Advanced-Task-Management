@@ -13,15 +13,15 @@ import { RouterLink } from '@angular/router';
 export class CategoriesListComponent implements OnInit {
   categories: Category[] = [];
 
-  constructor(private _categoryService: CategoryService) { }
+  constructor(private categoryService: CategoryService) { }
 
   ngOnInit(): void {
-    this.categories = this._categoryService.getCategories();
+    this.categories = this.categoryService.getCategories();
   }
 
 
   deleteCategory(id: number): void {
-    this._categoryService.deleteCategory(id); 
+    this.categoryService.deleteCategory(id); 
     this.ngOnInit();
   }
 }

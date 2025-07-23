@@ -16,16 +16,16 @@ export class PreviewTaskComponent implements OnInit {
   @Input() id: string | null = null;
   task: Task | undefined;
 
-  constructor(private _taskService: TaskService, private _router: Router) {}
+  constructor(private taskService: TaskService, private router: Router) {}
 
   ngOnInit(): void {
     if (this.id) {
-      this.task = this._taskService.getTask(parseInt(this.id));
+      this.task = this.taskService.getTask(parseInt(this.id));
     }
   }
 
   deleteTask(taskId: number): void {
-    this._taskService.deleteTask(taskId);
-    this._router.navigate(['/tasks']);
+    this.taskService.deleteTask(taskId);
+    this.router.navigate(['/tasks']);
   }
 }

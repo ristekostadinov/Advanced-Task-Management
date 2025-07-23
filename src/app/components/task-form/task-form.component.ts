@@ -38,19 +38,19 @@ export class TaskFormComponent implements OnInit {
   categories!: Category[];
 
   constructor(
-    private _formBuilder: FormBuilder,
-    private _router: Router,
-    private _taskService: TaskService,
-    private _categoryService: CategoryService
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private taskService: TaskService,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
     if (this.id) {
-      this.task = this._taskService.getTask(parseInt(this.id));
+      this.task = this.taskService.getTask(parseInt(this.id));
     }
-    this.categories = this._categoryService.getCategories();
+    this.categories = this.categoryService.getCategories();
 
-    this.taskForm = this._formBuilder.nonNullable.group({
+    this.taskForm = this.formBuilder.nonNullable.group({
       name: [
         this.task ? this.task.name : '',
         { validators: [Validators.required, Validators.minLength(3)] },
@@ -87,7 +87,7 @@ export class TaskFormComponent implements OnInit {
         formValue.dueDate &&
         formValue.priority
       ) {
-        this._taskService.updateTask(
+        this.taskService.updateTask(
           new Task(
             this.task.id,
             formValue.name,
@@ -106,7 +106,7 @@ export class TaskFormComponent implements OnInit {
       formValue.dueDate &&
       formValue.priority
     ) {
-      this._taskService.addTask(
+      this.taskService.addTask(
         new Task(
           Date.now(),
           formValue.name,
@@ -118,7 +118,7 @@ export class TaskFormComponent implements OnInit {
       );
     }
 
-    this._router.navigate(['/tasks']);
+    this.router.navigate(['/tasks']);
   }
 
   convertToPriority(priority: string): Priority {
