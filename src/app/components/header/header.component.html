@@ -1,1 +1,21 @@
-<p>header works!</p>
+<nav class="bg-blue-600 px-4 py-3">
+  <div class="container mx-auto flex items-center justify-between">
+    <a class="text-white text-xl font-bold" routerLink="/">Task Manager</a>
+    <ul class="flex gap-4 list-none m-0 p-0">
+      <li>
+        <a
+          class="text-white px-3 py-2 rounded transition-colors hover:bg-blue-200 hover:text-blue-800"
+          routerLink="/tasks"
+          >Tasks</a
+        >
+      </li>
+      <li>
+        <a
+          class="text-white px-3 py-2 rounded transition-colors hover:bg-blue-200 hover:text-blue-800"
+          routerLink="/categories"
+          >Categories</a
+        >
+      </li>
+    </ul>
+  </div>
+</nav>
