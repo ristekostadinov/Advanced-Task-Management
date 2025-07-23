@@ -32,12 +32,10 @@ export class CategoryService {
     return null;
   }
 
-  deleteCategory(id: number): boolean {
+  deleteCategory(id: number): void{
     if (this.categories[id]) {
       delete this.categories[id];
-      return true;
     }
-    return false;
   }
 
   getCategories(): Category[] {

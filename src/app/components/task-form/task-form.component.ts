@@ -75,47 +75,31 @@ export class TaskFormComponent implements OnInit {
   }
 
   submitForm() {
-    if (this.taskForm.invalid) {
+    if (this.taskForm.invalid || !this.taskForm.value) {
       return;
     }
-    const formValue = this.taskForm.value;
+    const {
+      name = '',
+      description = '',
+      category = '',
+      dueDate = new Date(),
+      priority = '',
+    } = this.taskForm.value;
+
+    const taskData: Task = {
+      id: this.task ? this.task.id : 0,
+      name,
+      description,
+      category: this.getCategory(category),
+      dueDate: new Date(dueDate),
+      priority: this.convertToPriority(priority),
+      completed: this.task ? this.task.completed : false,
+    };
+
     if (this.id && this.task) {
-      if (
-        formValue.name &&
-        formValue.description &&
-        formValue.category &&
-        formValue.dueDate &&
-        formValue.priority
-      ) {
-        this.taskService.updateTask(
-          new Task(
-            this.task.id,
-            formValue.name,
-            formValue.description,
-            this.getCategory(formValue.category),
-            formValue.dueDate,
-            this.convertToPriority(formValue.priority),
-            this.task.completed
-          )
-        );
-      }
-    } else if (
-      formValue.name &&
-      formValue.description &&
-      formValue.category &&
-      formValue.dueDate &&
-      formValue.priority
-    ) {
-      this.taskService.addTask(
-        new Task(
-          Date.now(),
-          formValue.name,
-          formValue.description,
-          this.getCategory(formValue.category),
-          formValue.dueDate,
-          this.convertToPriority(formValue.priority)
-        )
-      );
+      this.taskService.updateTask(taskData);
+    } else {
+      this.taskService.addTask(taskData);
     }
 
     this.router.navigate(['/tasks']);
@@ -135,6 +119,9 @@ export class TaskFormComponent implements OnInit {
   }
 
   getCategory(categoryName: string): Category {
-    return this.categories.find((cat) => cat.name === categoryName) || this.categories[0];
+    return (
+      this.categories.find((cat) => cat.name === categoryName) ||
+      this.categories[0]
+    );
   }
 }

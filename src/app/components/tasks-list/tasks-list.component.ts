@@ -54,14 +54,10 @@ export class TasksListComponent implements OnInit {
     if (this.filterByCategory) {
       this.tasks = this.taskService.getTasks().filter((task) => {
         // Handles both cases: category is an object or an ID
-        if (task.category && typeof task.category === 'object') {
-          return String(task.category.id) === this.filterByCategory;
-        }
-        return String(task.category) === this.filterByCategory;
+        return String(task.category.id) === this.filterByCategory;
       });
     } else {
       this.tasks = this.taskService.getTasks();
     }
-    this.sortTasks();
   }
 }

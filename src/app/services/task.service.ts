@@ -43,7 +43,9 @@ export class TaskService {
   }
 
   addTask(task: Task): void {
-    this.taskRecord[task.id] = task;
+    task.id = this.nextId;
+    this.taskRecord[this.nextId] = task;
+    this.nextId++;
   }
 
   deleteTask(taskId: number): void {
