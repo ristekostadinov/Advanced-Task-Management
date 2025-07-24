@@ -11,6 +11,11 @@ import {
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 
+/**
+ * @description Reusable form component for creating and editing categories.
+ * @param {string | null} id is the category ID for editing, it is taken from the path variable param.
+ * @param {Observable<Category | undefined>} category$ is an observable for the category being edited.
+ */
 @Component({
   selector: 'app-category-form',
   standalone: true,

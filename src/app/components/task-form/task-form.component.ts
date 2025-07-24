@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
-  Form,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -25,6 +24,15 @@ interface ITaskForm {
   priority: FormControl<string>;
 }
 
+/**
+ * @description Reusable form component for creating and editing tasks.
+ * @param {ITaskForm} taskForm is typed reactive form for task creation and editing.
+ * @param {string | null} id is the task ID for editing, it is taken from the path variable param.
+ * @param {Observable<Category[]>} categories$ is an observable for the list of categories.
+ * @param {Category[]} allCategories is a cached array of all categories for quick access.
+ * @param {string} title is the title of the form, either "Create Task" or "Edit Task".
+ * @param {Task | undefined} task is the current task being edited
+ */
 @Component({
   selector: 'app-task-form',
   standalone: true,
@@ -35,7 +43,6 @@ interface ITaskForm {
 export class TaskFormComponent implements OnInit {
   @Input() id: string | null = null;
   title: string = '';
-  task$!: Observable<Task | undefined>;
   task: Task | undefined;
   taskForm!: FormGroup<ITaskForm>;
   categories$!: Observable<Category[]>;

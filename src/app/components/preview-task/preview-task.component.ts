@@ -6,6 +6,11 @@ import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
 import { FormatPriorityPipe } from '../../pipes/format-priority.pipe';
 import { Observable } from 'rxjs';
 
+/**
+ * @description Component for previewing a task.
+ * @param {string | null} id is the task ID for previewing, it is taken from the path variable param.
+ * @param {Observable<Task | undefined>} task$ is an observable for the task being previewed.
+ */
 @Component({
   selector: 'app-preview-task',
   standalone: true,

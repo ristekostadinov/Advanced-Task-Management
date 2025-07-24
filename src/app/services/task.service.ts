@@ -5,6 +5,10 @@ import { Category } from '../models/category.model';
 import { CategoryService } from './category.service';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 
+/**
+ * Service for managing tasks, including CRUD operations.
+ * Uses BehaviorSubject to emit changes to the task list.
+ */
 @Injectable({
   providedIn: 'root',
 })

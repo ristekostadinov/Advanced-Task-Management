@@ -10,6 +10,15 @@ import { FormatPriorityPipe } from '../../pipes/format-priority.pipe';
 import { CategoryService } from '../../services/category.service';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 
+/**
+ *
+ * @description Component for displaying a list of tasks with sorting and filtering options.
+ * Allows toggling task completion and deleting tasks.
+ * @param {BehaviorSubject<'dueDate' | 'priority' | ''>} sortBy$ is used to control the sorting of tasks.
+ * @param {BehaviorSubject<string>} filterByCategory$ is used to filter tasks by category.
+ * @param {Observable<Task[]>} tasks$ is an observable for the list of tasks.
+ * @param {Observable<Category[]>} categories$ is an observable for the list of categories.
+ */
 @Component({
   selector: 'app-tasks-list',
   standalone: true,
@@ -67,11 +76,26 @@ export class TasksListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSortChange(event : Event): void {
-    const value = (event.target as HTMLSelectElement).value as 'dueDate' | 'priority' | '';
+  /**
+   *
+   * @param event is the change event from the sort dropdown.
+   * @description Handles the change event for sorting tasks.
+   * Updates the sortBy$ BehaviorSubject with the selected sorting option.
+   */
+  onSortChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value as
+      | 'dueDate'
+      | 'priority'
+      | '';
     this.sortBy$.next(value);
   }
 
+  /**
+   *
+   * @param event is the change event from the category filter dropdown.
+   * @description Handles the change event for filtering tasks by category.
+   * Updates the filterByCategory$ BehaviorSubject with the selected category ID.
+   */
   onCategoryChange(event: Event): void {
     const selectedCategoryId = (event.target as HTMLSelectElement).value;
     this.filterByCategory$.next(selectedCategoryId);
