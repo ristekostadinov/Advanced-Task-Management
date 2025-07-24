@@ -11,9 +11,11 @@
         formControlName="name"
         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       />
-      @if(taskForm.get('name')?.hasError('required')) {
+      @if(taskForm.get('name')?.touched &&
+      taskForm.get('name')?.hasError('required')) {
       <p class="text-red-500 text-sm mt-1">Task name is required</p>
-      } @if(taskForm.get('name')?.hasError('minlength')) {
+      } @if(taskForm.get('name')?.touched &&
+      taskForm.get('name')?.hasError('minlength')) {
       <p class="text-red-500 text-sm mt-1">
         Minimum length for task name should be at least 5 characters
       </p>
@@ -28,9 +30,9 @@
         formControlName="description"
         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       ></textarea>
-      @if(taskForm.get('description')?.hasError('required')) {
+      @if(taskForm.get('description')?.touched && taskForm.get('description')?.hasError('required')) {
       <p class="text-red-500 text-sm mt-1">Description is required</p>
-      } @if(taskForm.get('description')?.hasError('minlength')) {
+      } @if(taskForm.get('description')?.touched && taskForm.get('description')?.hasError('minlength')) {
       <p class="text-red-500 text-sm mt-1">
         Task description should contain at least 15 characters
       </p>
@@ -45,7 +47,7 @@
         formControlName="category"
         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       >
-        @for(category of categories; track category.id) {
+        @for(category of categories$ | async ; track category.id) {
         <option [value]="category.id">
           {{ category.name }}
         </option>
@@ -70,21 +72,21 @@
       }
     </div>
     <div class="mb-4">
-        <label for="priority" class="block text-sm font-medium text-gray-700"
-          >Priority:</label
-        >
-        <select
-          id="priority"
-          formControlName="priority"
-          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-        >
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
-        @if(taskForm.get('priority')?.hasError('required')) {
-        <p class="text-red-500 text-sm mt-1">Priority is required</p>
-        }
+      <label for="priority" class="block text-sm font-medium text-gray-700"
+        >Priority:</label
+      >
+      <select
+        id="priority"
+        formControlName="priority"
+        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+      >
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+      @if(taskForm.get('priority')?.hasError('required')) {
+      <p class="text-red-500 text-sm mt-1">Priority is required</p>
+      }
     </div>
     <button
       type="submit"

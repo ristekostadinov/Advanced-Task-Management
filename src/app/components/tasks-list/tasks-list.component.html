@@ -3,7 +3,7 @@
   <div class="flex md:flex-row gap-3 sm:flex-col mb-6">
     <div class="flex-1">
       <label>Sort by:</label>
-      <select [(ngModel)]="sortBy" (change)="sortTasks()">
+      <select [ngModel]="sortBy$ | async" (change)="onSortChange($event)">
         <option value="">None</option>
         <option value="dueDate">Due Date</option>
         <option value="priority">Priority</option>
@@ -11,9 +11,12 @@
     </div>
     <div class="flex-1">
       <label>Filter by Category:</label>
-      <select [(ngModel)]="filterByCategory" (change)="filterTasks()">
+      <select
+        [ngModel]="filterByCategory$ | async"
+        (change)="onCategoryChange($event)"
+      >
         <option value="">All</option>
-        @for (category of categories; track category.id) {
+        @for (category of categories$ | async ; track category.id) {
         <option [value]="category.id">{{ category.name }}</option>
         }
       </select>
@@ -29,12 +32,12 @@
   </div>
 
   <div class="flex flex-col gap-6">
-    @for (task of tasks; track task.id) {
+    @for (task of tasks$ | async; track task.id) {
     <div class="bg-white rounded-lg shadow p-4 flex flex-col justify-between">
       <div>
         <h2 class="text-lg font-semibold mb-2">{{ task.name }}</h2>
         <p class="text-gray-600 mb-4">Due date: {{ task.dueDate | date }}</p>
-        <p>Category: {{task.category.name}}</p>
+        <p>Category: {{ task.category.name }}</p>
         <div>
           <label for="completed-{{ task.id }}">Task Competed: </label>
           <input
@@ -55,7 +58,7 @@
               'bg-orange-500': task.priority === 2,
               'bg-green-600': task.priority === 3
             }"
-            >{{ task.priority | formatPriority}}</span
+            >{{ task.priority | formatPriority }}</span
           >
         </p>
       </div>

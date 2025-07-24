@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CategoryService } from '../../services/category.service';
 import { Router } from '@angular/router';
 import { Category } from '../../models/category.model';
@@ -9,7 +9,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Observable } from 'rxjs';
 
+/**
+ * @description Reusable form component for creating and editing categories.
+ * @param {string | null} id is the category ID for editing, it is taken from the path variable param.
+ * @param {Observable<Category | undefined>} category$ is an observable for the category being edited.
+ */
 @Component({
   selector: 'app-category-form',
   standalone: true,
@@ -20,7 +26,7 @@ import {
 export class CategoryFormComponent implements OnInit {
   title: string = '';
   @Input() id: string | null = null;
-  category?: Category;
+  category$!: Observable<Category | undefined>;
   categoryForm!: FormGroup;
 
   constructor(
@@ -31,19 +37,24 @@ export class CategoryFormComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.id) {
-      this.category = this.categoryService.getCategory(parseInt(this.id));
+      this.category$ = this.categoryService.getCategory(parseInt(this.id));
+      this.category$.subscribe((category) => {
+        this.categoryForm = this.formBuilder.nonNullable.group({
+          name: [
+            category ? category.name : '',
+            [Validators.required, Validators.minLength(5)],
+          ],
+        });
+        this.title = category ? 'Edit Category' : 'Create Category';
+      });
+    } else {
+      this.categoryForm = this.formBuilder.nonNullable.group({
+        name: ['', [Validators.required, Validators.minLength(5)]],
+      });
+      this.title = 'Create Category';
     }
-
-    this.categoryForm = this.formBuilder.nonNullable.group({
-      name: [
-        this.category ? this.category.name : '',
-        [Validators.required, Validators.minLength(5)],
-      ],
-    });
-
-    this.title = this.category ? 'Edit Category' : 'Create Category';
-    console.log(this.category);
   }
+
 
   submitForm() {
     if (this.categoryForm.invalid) {
