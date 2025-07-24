@@ -36,11 +36,10 @@ export class TaskFormComponent implements OnInit {
   @Input() id: string | null = null;
   title: string = '';
   task$!: Observable<Task | undefined>;
-  task: Task | undefined; // To store the task object for later use
+  task: Task | undefined;
   taskForm!: FormGroup<ITaskForm>;
-  categories$!: Observable<Category[]>; // It's better to ensure it's always an array
-  allCategories: Category[] = []; // To store categories after subscription
-
+  categories$!: Observable<Category[]>;
+  allCategories: Category[] = [];
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -49,16 +48,14 @@ export class TaskFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('TaskFormComponent: ngOnInit started. Input ID:', this.id);
     this.title = this.id ? 'Edit Task' : 'Create Task';
 
-    // *** FIX: Initialize the form IMMEDIATELY with default/empty values ***
     this.taskForm = this.formBuilder.nonNullable.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
       description: ['', [Validators.required, Validators.minLength(15)]],
-      category: [0, [Validators.required]], // Default to null initially
-      dueDate: ['', [Validators.required]], // Default to empty string
-      priority: ['Medium', [Validators.required]], // Default priority
+      category: [0, [Validators.required]],
+      dueDate: ['', [Validators.required]],
+      priority: ['Medium', [Validators.required]],
     });
 
     const taskId = this.id ? parseInt(this.id) : undefined;
@@ -69,10 +66,6 @@ export class TaskFormComponent implements OnInit {
       categories: this.categoryService.getCategories(),
     }).subscribe({
       next: ({ task, categories }) => {
-        console.log('ForkJoin received data:');
-        console.log('  Task object from service:', task); // Check this very carefully
-        console.log('  Categories array from service:', categories);
-
         this.task = task; // Store the task for later use
         this.allCategories = categories;
         this.categories$ = of(categories); // Still setting this for template's async pipe
@@ -86,11 +79,7 @@ export class TaskFormComponent implements OnInit {
           // If creating and categories exist, default to the first one
           categoryToSet = categories[0].id;
         }
-        // If no task and no categories, categoryToSet remains null, which is fine given the FormControl type
-
-        // *** CRITICAL FIX: Use patchValue() to update the existing form ***
         this.taskForm.patchValue({
-          // <--- Use patchValue() here!
           name: task ? task.name : '',
           description: task ? task.description : '',
           category: task ? task.category.id : undefined,
@@ -116,9 +105,8 @@ export class TaskFormComponent implements OnInit {
     const formValue = this.taskForm.value;
     const { name, description, category, dueDate, priority } = formValue;
     if (name && description && category && dueDate && priority) {
-      const selectedCategory = this.getCategoryById(category);
       
-      console.log('Selected category:', selectedCategory);
+      const selectedCategory = this.getCategoryById(category);
 
       const taskData: Task = {
         id: this.task ? this.task.id : 0,
