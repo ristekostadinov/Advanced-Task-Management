@@ -16,12 +16,13 @@ export class CategoriesListComponent implements OnInit {
   constructor(private categoryService: CategoryService) { }
 
   ngOnInit(): void {
-    this.categories = this.categoryService.getCategories();
+    this.categoryService.getCategories().subscribe((categories) => {
+      this.categories = categories;
+    });
   }
 
 
   deleteCategory(id: number): void {
-    this.categoryService.deleteCategory(id); 
-    this.ngOnInit();
+    this.categoryService.deleteCategory(id);
   }
 }
