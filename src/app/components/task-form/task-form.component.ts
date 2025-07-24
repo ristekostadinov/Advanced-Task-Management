@@ -115,6 +115,7 @@ export class TaskFormComponent implements OnInit {
       
       const selectedCategory = this.getCategoryById(category);
 
+      // Create a new Task object with the form values
       const taskData: Task = {
         id: this.task ? this.task.id : 0,
         name: name,
@@ -127,18 +128,10 @@ export class TaskFormComponent implements OnInit {
 
       if (this.id) {
         this.taskService
-          .getTask(parseInt(this.id))
-
-          .subscribe((existingTask) => {
-            if (existingTask) {
-              taskData.completed = existingTask.completed;
-            }
-            this.taskService
-              .updateTask(taskData)
-              .pipe(take(1))
-              .subscribe(() => {
-                this.router.navigate(['/tasks']);
-              });
+          .updateTask(taskData)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.router.navigate(['/tasks']);
           });
       } else {
         this.taskService
@@ -151,6 +144,11 @@ export class TaskFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Converts a string priority to the Priority enum.
+   * @param {string} priority - The string representation of the priority.
+   * @returns {Priority} The corresponding Priority enum value.
+   */
   convertToPriority(priority: string): Priority {
     switch (priority) {
       case 'High':
